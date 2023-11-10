@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="display-container">
+            <div class="sub-display"></div>
+            <div class="display"></div>
+        </div>
+        <div class="button-container">
+            <button class="cancel">AC</button>
+            <button class="delete"><i class="fa-solid fa-delete-left"></i></button>
+            <button class="symbol" data-value="%">%</button>
+            <button class="symbol" data-value="/">/</button>
+            
+            <button class="number" data-value="7">7</button>
+            <button class="number" data-value="8">8</button>
+            <button class="number" data-value="9">9</button>
+            <button class="symbol" data-value="*">*</button>
+
+            <button class="number" data-value="4">4</button>
+            <button class="number" data-value="5">5</button>
+            <button class="number" data-value="6">6</button>
+            <button class="symbol" data-value="-">-</button>
+
+            <button class="number" data-value="1">1</button>
+            <button class="number" data-value="2">2</button>
+            <button class="number" data-value="3">3</button>
+            <button class="symbol" data-value="+">+</button>
+
+            <button>NA</button>
+            <button class="number" data-value="0">0</button>
+            <button class="number" data-value=".">.</button>
+            <button class="equalto">=</button>
+        </div>
+    </div>
+
+    <script>
+        const numberBtn = document.querySelectorAll(".number");
+        const symbolBtn = document.querySelectorAll(".symbol");
+        const cancelBtn = document.querySelectorAll(".cancel");
+        const deleteBtn = document.querySelectorAll(".delete");
+        const equaltoBtn = document.querySelectorAll(".equalto");
+
+        const display1 = document.querySelector(".sub-display");
+        const display2 = document.querySelector(".display");
+    
+        function addNumber(){
+            const value = this.getAttribute("data-value") || this.closest(".btn").getAttribute("data-value");
+            let curr = display2.textContent;
+
+            // if(display1.textContent !== ""){
+            //     curr = "";
+            // }
+
+            display2.innerHTML = curr + value;
+        }
+
+        function calculate(){
+            const value = this.getAttribute("data-value") || this.closest(".btn").getAttribute("data-value");
+            if(display1.textContent === ""){
+                display1.innerHTML = display2.textContent + value;
+                display2.textContent = "";
+            }
+            else{
+                // console.log(display1.textContent.slice(-1));
+                let result = Calc();
+                display1.innerHTML = result + value;
+                display2.innerHTML = "";
+            }
+        }
+
+        function Calc(){
+            let a = parseFloat(display1.textContent.slice(0, -1));
+            let b = parseFloat(display2.textContent);
+            let operator = display1.textContent.slice(-1);
+
+            switch (operator) {
+                case "+":
+                    return a + b;
+                case "-":
+                    return a - b;
+                case "*":
+                    return a * b;
+                case "/":
+                    return a / b;
+                case "%":
+                    return a % b;
+            }
+        }
+
+        function equalto(){
+            let result = Calc();
+            display1.innerHTML = "";
+            display2.innerHTML = result;
+        }
+
+        function cancel(){
+            display1.innerHTML = "";
+            display2.innerHTML = "";
+        }
+
+        function backspace(){
+            let curr = display2.textContent;
+            display2.innerHTML = curr.slice(0, -1);
+        }
+    
+        symbolBtn.forEach(button => {
+            button.addEventListener("click", calculate); 
+        });
+
+        equaltoBtn.forEach(button => {
+            button.addEventListener("click", equalto); 
+        });
+
+        numberBtn.forEach(button => {
+            button.addEventListener("click", addNumber); 
+        });
+
+        deleteBtn.forEach(button => {
+            button.addEventListener("click", backspace); 
+        });
+
+        cancelBtn.forEach(button => {
+            button.addEventListener("click", cancel); 
+        });
+    </script>
+    
+</body>
+</html>
